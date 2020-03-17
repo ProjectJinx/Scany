@@ -1,10 +1,15 @@
 import dataset
-import json
 from datetime import datetime
-from Device import Device
+from Scany.libs.Device import Device
 
 
 class DB(object):
+    DATE_FORMAT = "%a, %H:%M:%S %d.%m.%Y"
+
+    TABLE_DEVICES = "devices"
+    COLUMN_DEVICE_ID = "id"
+    COLUMN_DEVICE_MAC = "mac"
+
     db = None
     devices = []
 
@@ -12,21 +17,18 @@ class DB(object):
         self.db = dataset.connect('sqlite:///{0}'.format(database))
 
     def update(self, device):
-        #print(device.__dict__)
-        update_data = device.__dict__
-        update_data["lastconnect"] = datetime.now().strftime("%a, %H:%M:%S %d.%m.%Y")
-        self.db["devices"].upsert(update_data, ["mac"])
+        device.last_connect = datetime.now().strftime(self.DATE_FORMAT)
+        self.db[self.TABLE_DEVICES].upsert(device.__dict__, [self.COLUMN_DEVICE_MAC])
 
     def find(self, device):
-        dev = self.db["devices"].find_one(mac=str(device.mac))
+        dev = self.db[self.TABLE_DEVICES].find_one(mac=str(device.mac))
         if dev is None:
             return None
-        del dev["id"]
+        del dev[self.COLUMN_DEVICE_ID]
         return Device(**dev)
 
     def get_all(self):
         r = []
-        for dev in self.db["devices"].all():
+        for dev in self.db[self.TABLE_DEVICES].all():
             r.append(Device(**dev).__dict__)
-
         return r
