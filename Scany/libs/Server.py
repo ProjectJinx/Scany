@@ -2,7 +2,7 @@ from threading import Thread
 from flask import Flask, make_response, request as req
 from werkzeug.serving import make_server
 from json import dumps
-from DB import DB
+from Scany.libs.DB import DB
 
 
 class Server(Thread):
@@ -21,9 +21,7 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Scanner", methods=["GET", "POST"])
         def res():
-            print(req.args)
             if req.method == "POST":
-                print(req.json)
                 if req.json["password"] == self.passwd:
                     devices = self.db.get_all()
                     return make_response(dumps(devices))
