@@ -1,9 +1,10 @@
-from Scanner import Scanner
+#!/usr/bin/python3
 from argparse import ArgumentParser
-from Server import Server
 from getpass import getpass
-from DB import DB
 
+from Scany.libs.DB import DB
+from Scany.libs.Server import Server
+from Scany.libs.Scanner import Scanner
 
 if __name__ == '__main__':
     p = ArgumentParser()
@@ -13,14 +14,20 @@ if __name__ == '__main__':
 
     a = p.parse_args()
     db = DB(a.database)
+
+    tasks = []
     if a.server:
         pw = getpass()
-        srv = Server(pw, db)
-        srv.start()
+        tasks.append(Server(pw, db))
 
-    scn = Scanner(db, a.sleep)
+    tasks.append(Scanner(db, a.sleep))
+
+    for task in tasks:
+        task.start()
+
     try:
-        scn.start()
-        scn.join()
+        tasks[0].join()
     except KeyboardInterrupt:
-        scn.stop()
+        for task in tasks:
+            task.stop()
+            task.join()
