@@ -2,15 +2,14 @@
 from argparse import ArgumentParser
 from getpass import getpass
 
-from Scany.libs.DB import DB
-from Scany.libs.Server import Server
-from Scany.libs.Scanner import Scanner
+from Scany import *
 
-if __name__ == '__main__':
+
+def main():
     p = ArgumentParser()
-    p.add_argument("-s", "--server", action="store_true")
-    p.add_argument("--sleep", type=int, default=10)
-    p.add_argument("-db", "--database", type=str, default="Scany.db")
+    p.add_argument("-s", "--server", action="store_true", help="start the http api server")
+    p.add_argument("-db", "--database", type=str, default="Scany.db", help="path to sqlite database")
+    p.add_argument("--sleep", type=int, default=10, help="sleep time for scanner")
 
     a = p.parse_args()
     db = DB(a.database)
@@ -31,3 +30,7 @@ if __name__ == '__main__':
         for task in tasks:
             task.stop()
             task.join()
+
+
+if __name__ == '__main__':
+    main()
