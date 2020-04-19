@@ -1,10 +1,11 @@
 import dataset
-import json
 from datetime import datetime
-from Device import Device
+from . import Device
 
 
 class DB(object):
+    DATE_FORMAT = "%a, %H:%M:%S %d.%m.%Y"
+
     db = None
     devices = []
 

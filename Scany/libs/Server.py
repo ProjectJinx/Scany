@@ -2,7 +2,7 @@ from threading import Thread
 from flask import Flask, make_response, request as req
 from werkzeug.serving import make_server
 from json import dumps
-from DB import DB
+from . import DB
 
 
 class Server(Thread):
