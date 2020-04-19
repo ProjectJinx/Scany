@@ -4,7 +4,7 @@ from socket import socket, AF_INET, SOCK_DGRAM
 from scapy.layers.l2 import Ether, ARP
 from scapy.all import srp
 from time import sleep
-from . import Device
+from Scany.libs.Device import Device
 
 
 class Scanner(Thread):

@@ -1,6 +1,6 @@
 import dataset
 from datetime import datetime
-from . import Device
+from Scany.libs.Device import Device
 
 
 class DB(object):
@@ -13,7 +13,7 @@ class DB(object):
         self.db = dataset.connect('sqlite:///{0}'.format(database))
 
     def update(self, device):
-        #print(device.__dict__)
+        # print(device.__dict__)
         update_data = device.__dict__
         update_data["lastconnect"] = datetime.now().strftime("%a, %H:%M:%S %d.%m.%Y")
         self.db["devices"].upsert(update_data, ["mac"])
