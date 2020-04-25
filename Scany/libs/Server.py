@@ -1,3 +1,4 @@
+import hashlib
 import random
 import string
 from json import dumps
@@ -25,7 +26,7 @@ class Server(Thread):
 
     def __init__(self, pwd, db):
         Thread.__init__(self)
-        self.passwd = pwd
+        self.passwd = hashlib.sha256(pwd.encode("UTF-8")).hexdigest()
         self.app = Flask(__name__)
         self.srv = make_server("127.0.0.1", 1337, self.app)
         self.db = db
@@ -35,7 +36,7 @@ class Server(Thread):
         @self.app.route("/Auth", methods=["POST"])
         def auth():
             if "password" in req.json.keys():
-                if check_password_hash(req.json["password"], self.passwd):
+                if req.json["password"] == self.passwd:
                     tk = Token.create(create_token())
                     self.db.update_token(tk)
                     return make_response(dumps({"resp": tk.passwd}))

@@ -1,5 +1,5 @@
+import hashlib
 from threading import Thread, Timer
-from werkzeug.security import generate_password_hash
 from getpass import getpass
 
 import requests
@@ -14,7 +14,7 @@ class Client(Thread):
     def __init__(self, dst, pwd, db):
         Thread.__init__(self)
         self.dest = dst
-        self.passwd = generate_password_hash(pwd)
+        self.passwd = hashlib.sha256(pwd.encode("UTF-8")).hexdigest()
         self.db = db
 
     def run(self) -> None:
@@ -28,7 +28,8 @@ class Client(Thread):
             res = r.json()
             if res["resp"] == "None":
                 print("Wrong password.")
-                self.passwd = generate_password_hash(getpass())
+                pwd = getpass()
+                self.passwd = hashlib.sha256(pwd.encode("UTF-8")).hexdigest()
                 self.auth()
             else:
                 self.token = res["resp"]
