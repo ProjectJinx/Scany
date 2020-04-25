@@ -50,7 +50,7 @@ class Server(Thread):
                 print(req.json)
                 if "token" in req.json.keys():
                     if self.db.token_exists(req.json["token"]):
-                        return make_response(dumps({"devices": self.db.get_all_devices()}))
+                        return make_response(dumps(self.db.get_all_devices()))
                 else:
                     return make_response(dumps({"resp": "wrongg"}))
             else:
