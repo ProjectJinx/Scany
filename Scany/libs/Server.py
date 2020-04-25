@@ -49,8 +49,10 @@ class Server(Thread):
             print(req.args)
             if req.method == "POST":
                 if self.db.token_exists(req.data):
+                    print("sending devices")
                     return make_response(dumps({"devices": self.db.get_all_devices()}))
                 else:
+                    print("I dont like u")
                     return make_response("no thx")
             else:
                 return make_response("what are u doing")
