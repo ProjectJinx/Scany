@@ -48,14 +48,20 @@ class Server(Thread):
         def resp():
             print(req.args)
             if req.method == "POST":
-                print(req.json)
-                if "token" in req.json.keys():
-                    if self.db.token_exists(req.json["token"]):
-                        return make_response(dumps({"devices": self.db.get_all_devices()}))
-                else:
-                    return make_response(dumps({"resp": "wrongg"}))
+                if self.db.token_exists(req.data):
+                    return make_response(dumps({"devices": self.db.get_all_devices()}))
             else:
                 return make_response("what are u doing")
+
+        @self.app.route("/AuthClient", methods=["POST"])
+        def auth_client():
+            if "password" in req.json.keys():
+                if check_password_hash(req.json["password"], self.passwd):
+                    tk = Token.create(create_token())
+                    self.db.update_token(tk)
+                    return make_response(dumps({"resp": tk.passwd}))
+                else:
+                    return make_response(dumps({"resp": "None"}))
 
         @self.app.route("/DB", methods=["POST"])
         def receive_db():

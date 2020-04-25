@@ -21,7 +21,7 @@ class Client(Thread):
         self.auth()
 
     def auth(self):
-        d = self.dest + "/Auth"
+        d = self.dest + "/AuthClient"
         r = requests.post(d, json={"password": self.passwd}, timeout=100)
         # print(r.text)
         if r.status_code == requests.codes.ok:
