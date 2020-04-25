@@ -35,16 +35,14 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
-            print(req.json)
-            if "password" in req.json.keys():
-                if req.json["password"] == self.passwd:
-                    tk = Token.create(create_token())
-                    self.db.update_token(tk)
-                    print(tk.passwd)
-                    return make_response(tk.passwd)
-                else:
-                    return make_response("None")
-            return make_response("Jeff")
+            print(req.data)
+            if req.data == self.passwd:
+                tk = Token.create(create_token())
+                self.db.update_token(tk)
+                print(tk.passwd)
+                return make_response(tk.passwd)
+            else:
+                return make_response("None")
 
         @self.app.route("/Scanner", methods=["GET", "POST"])
         def resp():
