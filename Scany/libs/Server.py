@@ -35,7 +35,7 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
-            data = req.data.decode("utf-8")
+            data = req.data.decode("utf-8").lower()
             print("data = " + data)
             print(self.passwd)
             if req.data == self.passwd:
