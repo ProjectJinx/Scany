@@ -23,5 +23,5 @@ setup(
             'Scany = Scany.__main__:main'
         ]
     },
-    install_requires=["flask", "werkzeug", "scapy", "dataset"]
+    install_requires=["flask", "werkzeug", "scapy", "dataset"] 
 )
