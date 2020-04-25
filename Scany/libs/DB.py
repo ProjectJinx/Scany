@@ -16,14 +16,12 @@ class DB(object):
         self.sleep = sleep
 
     def update_device(self, device):
-        # print(device.__dict__)
         update_data = device.__dict__
         update_data["lastconnect"] = datetime.now().strftime(self.DATE_FORMAT)
         self.db["devices"].upsert(update_data, ["mac"])
 
     def update_all_devices(self, devices):
         for d in devices:
-            print(d)
             self.update_device(Device(**d))
 
     def find_device(self, device):

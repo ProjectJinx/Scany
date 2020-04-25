@@ -29,7 +29,7 @@ class Server(Thread):
         self.app = Flask(__name__)
         self.srv = make_server("127.0.0.1", 1337, self.app)
         self.db = db
-        print("init")
+        print("initializing")
 
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])

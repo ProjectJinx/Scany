@@ -23,7 +23,7 @@ class Client(Thread):
     def auth(self):
         d = self.dest + "/Auth"
         r = requests.post(d, json={"password": self.passwd}, timeout=100)
-        print(r.text)
+        # print(r.text)
         if r.status_code == requests.codes.ok:
             res = r.json()
             if res["resp"] == "None":
@@ -40,7 +40,6 @@ class Client(Thread):
         d = self.dest + "/DB"
         data = {"token": self.token, "devices": self.db.get_all_devices()}
         r = requests.post(d, json=data)
-        print(r.status_code)
         if r.status_code == requests.codes.ok:
             res = r.json()
             if res["resp"] == "wrongg":
