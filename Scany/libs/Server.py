@@ -13,7 +13,7 @@ from Scany.libs.Token import Token
 
 def create_token():
     t = "".join(random.choices(string.ascii_letters + string.digits, k=500))
-    generate_password_hash(t)
+    t = "" + generate_password_hash(t)
     return t
 
 
@@ -35,11 +35,11 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
-            print(req.data)
+            print("data = " + req.data)
             if req.data == self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
-                print(tk.passwd)
+                print("pass = " + tk.passwd)
                 return make_response(tk.passwd)
             else:
                 return make_response("None")
