@@ -37,8 +37,8 @@ class Server(Thread):
         def auth():
             data = req.data.decode("utf-8").lower()
             print("data = " + data)
-            print(self.passwd)
-            if data == self.passwd:
+            print("pass = " + self.passwd)
+            if data is self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
                 print("pass = " + tk.passwd)
