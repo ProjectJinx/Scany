@@ -30,7 +30,7 @@ class Scanner(Thread):
             ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=self.ips), timeout=2)
             for a in ans:
                 dev = Device.create(a[1][Ether].psrc, a[1][Ether].src)  # psrc = IP Address / src = MAC Address
-                self.db.update(self.db.find(dev) or dev)
+                self.db.update_device(self.db.find_device(dev) or dev)
             sleep(self.sleeptime)
 
     def stop(self):
