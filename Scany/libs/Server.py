@@ -46,7 +46,7 @@ class Server(Thread):
 
         @self.app.route("/Scanner", methods=["GET", "POST"])
         def resp():
-            print(req.args)
+            print(req.data)
             if req.method == "POST":
                 if self.db.token_exists(req.data):
                     print("sending devices")
