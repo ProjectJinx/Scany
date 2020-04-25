@@ -50,6 +50,8 @@ class Server(Thread):
             if req.method == "POST":
                 if self.db.token_exists(req.data):
                     return make_response(dumps({"devices": self.db.get_all_devices()}))
+                else:
+                    return make_response("no thx")
             else:
                 return make_response("what are u doing")
 
