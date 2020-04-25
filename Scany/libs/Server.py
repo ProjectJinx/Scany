@@ -38,12 +38,13 @@ class Server(Thread):
             data = req.data.decode("utf-8").lower()
             print("data = " + data)
             print(self.passwd)
-            if req.data == self.passwd.decode("utf-8"):
+            if req.data == self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
                 print("pass = " + tk.passwd)
                 return make_response(tk.passwd)
             else:
+                print("Now I'm not doing it")
                 return make_response("None")
 
         @self.app.route("/Scanner", methods=["GET", "POST"])
