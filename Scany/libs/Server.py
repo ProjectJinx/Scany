@@ -60,17 +60,15 @@ class Server(Thread):
                     print("sending devices")
                     return make_response(dumps(self.db.get_all_devices()))
                 else:
-                    print("I dont like u")
+                    print("rejected")
                     return make_response("no thx")
             else:
                 return make_response("what are u doing")
 
         @self.app.route("/AuthClient", methods=["POST"])
         def auth_client():
-            print(req.json["password"])
-            print(self.passwd)
             if "password" in req.json.keys():
-                if check_password_hash(req.json["password"], self.passwd):
+                if req.json["password"] == self.passwd:
                     tk = Token.create(create_token())
                     self.db.update_token(tk)
                     print("pass = " + tk.passwd)
