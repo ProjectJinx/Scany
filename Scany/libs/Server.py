@@ -18,7 +18,7 @@ def create_token():
 
 
 def fix_request(data):
-    fix = data.decode("utf-8").lower().replace('"', '')
+    fix = data.decode("utf-8").replace('"', '')
     return fix
 
 
@@ -40,7 +40,8 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
-            data = fix_request(req.data)
+            if req.data.__class__ == bytes:
+                data = fix_request(req.data)
             if data == self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
@@ -52,8 +53,8 @@ class Server(Thread):
 
         @self.app.route("/Scanner", methods=["GET", "POST"])
         def resp():
-            print(req.data.__class__)
-            data = fix_request(req.data)
+            if req.data.__class__ == bytes:
+                data = fix_request(req.data)
             print(data)
             if req.method == "POST":
                 if self.db.token_exists(data):
