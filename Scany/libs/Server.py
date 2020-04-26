@@ -17,6 +17,11 @@ def create_token():
     return t
 
 
+def fix_request(data):
+    fix = data.decode("utf-8").lower().replace('"', '')
+    return fix
+
+
 class Server(Thread):
     passwd = None
     app = None
@@ -35,7 +40,7 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
-            data = req.data.decode("utf-8").lower().replace('"', '')
+            data = fix_request(req.data)
             if data == self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
@@ -48,10 +53,11 @@ class Server(Thread):
         @self.app.route("/Scanner", methods=["GET", "POST"])
         def resp():
             print(req.data)
+            data = fix_request(req.data)
             if req.method == "POST":
-                if self.db.token_exists(req.data):
+                if self.db.token_exists(data):
                     print("sending devices")
-                    return make_response(dumps({"devices": self.db.get_all_devices()}))
+                    return make_response(dumps(self.db.get_all_devices()))
                 else:
                     print("I dont like u")
                     return make_response("no thx")
