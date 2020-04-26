@@ -18,8 +18,9 @@ def create_token():
 
 
 def fix_request(data):
-    fix = data.decode("utf-8").replace('"', '')
-    return fix
+    if isinstance(data, bytes):
+        data = data.decode("utf-8").replace('"', '')
+    return data
 
 
 class Server(Thread):
@@ -40,8 +41,7 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
-            if req.data.__class__ == bytes:
-                data = fix_request(req.data)
+            data = fix_request(req.data)
             if data.lower() == self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
@@ -53,8 +53,7 @@ class Server(Thread):
 
         @self.app.route("/Scanner", methods=["GET", "POST"])
         def resp():
-            if req.data.__class__ == bytes:
-                data = fix_request(req.data)
+            data = fix_request(req.data)
             print(data)
             if req.method == "POST":
                 if self.db.token_exists(data):
@@ -68,12 +67,15 @@ class Server(Thread):
 
         @self.app.route("/AuthClient", methods=["POST"])
         def auth_client():
+            print(req.json.keys())
             if "password" in req.json.keys():
                 if check_password_hash(req.json["password"], self.passwd):
                     tk = Token.create(create_token())
                     self.db.update_token(tk)
+                    print("pass = " + tk.passwd)
                     return make_response(dumps({"resp": tk.passwd}))
                 else:
+                    print("No pass")
                     return make_response(dumps({"resp": "None"}))
 
         @self.app.route("/DB", methods=["POST"])
