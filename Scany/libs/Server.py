@@ -67,7 +67,8 @@ class Server(Thread):
 
         @self.app.route("/AuthClient", methods=["POST"])
         def auth_client():
-            print(req.json.keys())
+            print(req.json["password"])
+            print(self.passwd)
             if "password" in req.json.keys():
                 if check_password_hash(req.json["password"], self.passwd):
                     tk = Token.create(create_token())
