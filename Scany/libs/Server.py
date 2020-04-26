@@ -36,17 +36,14 @@ class Server(Thread):
         @self.app.route("/Auth", methods=["POST"])
         def auth():
             data = req.data.decode("utf-8").lower().replace('"', '')
-            print("data = " + data)
-            print("pass = " + self.passwd)
-            print(self.passwd.__class__)
             if data == self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
                 print("pass = " + tk.passwd)
-                return make_response(tk.passwd)
+                return make_response(dumps({"token": tk.passwd}))
             else:
                 print("Now I'm not doing it")
-                return make_response("None")
+                return make_response(dumps({"token": "None"}))
 
         @self.app.route("/Scanner", methods=["GET", "POST"])
         def resp():
