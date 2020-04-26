@@ -42,7 +42,7 @@ class Server(Thread):
         def auth():
             if req.data.__class__ == bytes:
                 data = fix_request(req.data)
-            if data == self.passwd:
+            if data.lower() == self.passwd:
                 tk = Token.create(create_token())
                 self.db.update_token(tk)
                 print("pass = " + tk.passwd)
