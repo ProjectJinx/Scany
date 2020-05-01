@@ -83,7 +83,7 @@ class Server(Thread):
             if data is None:
                 return make_response(dumps({"resp": "um no"}))
             if "password" in data.keys():
-                if req.json["password"] == self.passwd:
+                if data["password"] == self.passwd:
                     tk = Token.create(create_token())
                     self.db.update_token(tk)
                     print("pass = " + tk.passwd)
