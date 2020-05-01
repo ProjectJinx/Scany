@@ -26,12 +26,7 @@ def fix_request(data):
 
 def fix_json(data):
     if isinstance(data, bytes):
-        try:
-            data = data.decode("utf-8")
-            data = json.loads(data)
-        except Exception as e:
-            print(e)
-            return None
+       data = json.loads(data)
     return data
 
 
