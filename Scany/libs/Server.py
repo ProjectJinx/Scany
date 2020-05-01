@@ -80,7 +80,7 @@ class Server(Thread):
             print(data)
             print(data.__class__)
             if data is None:
-                return make_response(dumps({"resp": "um no"}))
+                return make_response(dumps({"token": "no"}))
             if "password" in data.keys():
                 print(data["password"])
                 print(self.passwd)
@@ -88,13 +88,13 @@ class Server(Thread):
                     tk = Token.create(create_token())
                     self.db.update_token(tk)
                     print("pass = " + tk.passwd)
-                    return make_response(dumps({"resp": tk.passwd}))
+                    return make_response(dumps({"token": tk.passwd}))
                 else:
                     print("Wrong pass")
-                    return make_response(dumps({"resp": "Wrongg"}))
+                    return make_response(dumps({"token": "Wrongg"}))
             else:
                 print("No pass")
-                return make_response(dumps({"resp": "None"}))
+                return make_response(dumps({"token": "None"}))
 
         @self.app.route("/DB", methods=["POST"])
         def receive_db():
