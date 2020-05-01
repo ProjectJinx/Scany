@@ -79,6 +79,7 @@ class Server(Thread):
             data = fix_json(req.data)
             print(data)
             print(data.__class__)
+            
             if data is None:
                 return make_response(dumps({"resp": "um no"}))
             if "password" in data.keys():
