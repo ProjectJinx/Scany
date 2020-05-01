@@ -26,13 +26,13 @@ class Client(Thread):
         # print(r.text)
         if r.status_code == requests.codes.ok:
             res = r.json()
-            if res["resp"] == "None":
+            if res["token"] == "None":
                 print("Wrong password.")
                 pwd = getpass()
                 self.passwd = hashlib.sha256(pwd.encode("UTF-8")).hexdigest()
                 self.auth()
             else:
-                self.token = res["resp"]
+                self.token = res["token"]
                 self.send()
         else:
             print("No connection")

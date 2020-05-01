@@ -80,7 +80,7 @@ class Server(Thread):
             print(data)
             print(data.__class__)
             if data is None:
-                return make_response(dumps({"token": "no"}))
+                return make_response(dumps({"token": "No"}))
             if "password" in data.keys():
                 print(data["password"])
                 print(self.passwd)
