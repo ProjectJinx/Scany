@@ -26,7 +26,7 @@ def fix_request(data):
 
 def fix_json(data):
     if isinstance(data, bytes):
-       data = json.loads(data)
+        data = json.loads(data)
     return data
 
 
@@ -78,10 +78,11 @@ class Server(Thread):
         def auth_client():
             print(req.data)
             print(req.data.__class__)
-            req.json = fix_json(req.data)
-            if req.json is None:
+            data = fix_json(req.data)
+            print(data)
+            if data is None:
                 return make_response(dumps({"resp": "um no"}))
-            if "password" in req.json.keys():
+            if "password" in data.keys():
                 if req.json["password"] == self.passwd:
                     tk = Token.create(create_token())
                     self.db.update_token(tk)
