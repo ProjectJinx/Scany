@@ -1,4 +1,5 @@
 import hashlib
+import json
 import random
 import string
 from json import dumps
@@ -20,6 +21,16 @@ def create_token():
 def fix_request(data):
     if isinstance(data, bytes):
         data = data.decode("utf-8").replace('"', '')
+    return data
+
+
+def fix_json(data):
+    if isinstance(data, bytes):
+        try:
+            data = json.loads(data)
+        except Exception as e:
+            print(e)
+            return None
     return data
 
 
@@ -71,6 +82,9 @@ class Server(Thread):
         def auth_client():
             print(req.data)
             print(req.data.__class__)
+            req.json = fix_json(req.data)
+            if req.json is None:
+                return make_response(dumps({"resp": "um no"}))
             if "password" in req.json.keys():
                 if req.json["password"] == self.passwd:
                     tk = Token.create(create_token())
