@@ -41,6 +41,8 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
+            print(req.data)
+            print(req.data.__class__)
             data = fix_request(req.data)
             if data.lower() == self.passwd:
                 tk = Token.create(create_token())
