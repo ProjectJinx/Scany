@@ -47,7 +47,7 @@ class Client(Thread):
                 self.auth()
             else:
                 print("sending now")
-                t = Timer(3000, self.send)
+                t = Timer(120, self.send)
                 t.start()
         else:
             r.raise_for_status()
