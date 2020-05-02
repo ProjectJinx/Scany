@@ -77,17 +77,14 @@ class Server(Thread):
         @self.app.route("/AuthClient", methods=["POST"])
         def auth_client():
             data = fix_json(req.data)
-            print(data)
-            print(data.__class__)
             if data is None:
+                print("Empty data")
                 return make_response(dumps({"token": "No"}))
             if "password" in data.keys():
-                print(data["password"])
-                print(self.passwd)
                 if data["password"] == self.passwd:
                     tk = Token.create(create_token())
                     self.db.update_token(tk)
-                    print("pass = " + tk.passwd)
+                    print("sending token")
                     return make_response(dumps({"token": tk.passwd}))
                 else:
                     print("Wrong pass")

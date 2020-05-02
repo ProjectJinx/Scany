@@ -34,6 +34,7 @@ class DB(object):
     def get_all_devices(self):
         r = []
         for dev in self.db["devices"].all():
+            del dev["id"]
             r.append(Device(**dev).__dict__)
 
         return r
