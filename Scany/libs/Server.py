@@ -6,7 +6,7 @@ from json import dumps
 from threading import Thread, Timer
 
 from flask import Flask, make_response, request as req
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from werkzeug.serving import make_server
 
 from Scany.libs.Token import Token
@@ -48,8 +48,6 @@ class Server(Thread):
     def run(self) -> None:
         @self.app.route("/Auth", methods=["POST"])
         def auth():
-            print(req.data)
-            print(req.data.__class__)
             data = fix_request(req.data)
             if data.lower() == self.passwd:
                 tk = Token.create(create_token())
